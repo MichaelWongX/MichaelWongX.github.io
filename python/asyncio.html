@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Hello world！ 一个简单记录学习成长的地方！">
-<meta property="og:type" content="article">
+  <meta name="description" content="asyncio 学习笔记coroutinescoroutines used with asyncio may be implemented using the asyn def statement or by using generators . The async def type of coroutine was added in Python 3.5.Generator-based coro">
+<meta property="og:type" content="website">
 <meta property="og:title" content="后花园">
-<meta property="og:url" content="http://yoursite.com/2017/08/20/index/index.html">
+<meta property="og:url" content="http://yoursite.com/python/asyncio.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="Hello world！ 一个简单记录学习成长的地方！">
-<meta property="og:updated_time" content="2017-08-20T02:45:52.875Z">
+<meta property="og:description" content="asyncio 学习笔记coroutinescoroutines used with asyncio may be implemented using the asyn def statement or by using generators . The async def type of coroutine was added in Python 3.5.Generator-based coro">
+<meta property="og:updated_time" content="2017-08-20T02:54:01.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后花园">
-<meta name="twitter:description" content="Hello world！ 一个简单记录学习成长的地方！">
+<meta name="twitter:description" content="asyncio 学习笔记coroutinescoroutines used with asyncio may be implemented using the asyn def statement or by using generators . The async def type of coroutine was added in Python 3.5.Generator-based coro">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -151,12 +151,51 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-index" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="page-" class="article article-type-page " itemscope itemprop="blogPost">
   <div class="article-inner">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Hello-world！"><a href="#Hello-world！" class="headerlink" title="Hello world！"></a>Hello world！</h1><p><strong> 一个简单记录学习成长的地方！ </strong></p>
+        <h1 id="asyncio-学习笔记"><a href="#asyncio-学习笔记" class="headerlink" title="asyncio 学习笔记"></a>asyncio 学习笔记</h1><h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
+<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
+<ul>
+<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
+<li>the object obtained by calling a coroutine function.</li>
+</ul>
+<p>Things a coroutine can do:</p>
+<ul>
+<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
+<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
+<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
+<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
+</ul>
+<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
+<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
+<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
+<li>.stop()</li>
+<li>.close()</li>
+<li>.run_in_executor(f)</li>
+</ul>
+<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
+<ul>
+<li>AbstractEventLoop.call_soon（callback, *args).</li>
+<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
+<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
+<li>.call_at(when, callback, *args)</li>
+</ul>
+<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
+<ul>
+<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
+<li>.exception()<br>  Return the exception that was set on this future.</li>
+<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
+</ul>
+<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
+<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
+<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
+</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
+<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
 
       
 
@@ -215,7 +254,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/08/20/index/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/python/asyncio.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -227,20 +266,6 @@
 </article>
 
   
-<nav id="article-nav">
-  
-    <a href="/2017/08/20/hello/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          hello
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -289,7 +314,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

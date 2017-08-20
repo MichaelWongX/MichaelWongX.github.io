@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/20/requests/index.html">
 <meta property="og:site_name" content="后花园">
 <meta property="og:description" content="requests 摘要requests 支持多种HTTP请求类型，如get,put,delete,head,options,post, requests construct url with paraspayload = {&amp;apos;key1&amp;apos;: &amp;apos;value1&amp;apos;, &amp;apos;key2&amp;apos;: &amp;apos;value2&amp;apos;} r = requests">
-<meta property="og:updated_time" content="2017-08-20T03:38:03.501Z">
+<meta property="og:updated_time" content="2017-08-20T08:15:18.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="requests">
 <meta name="twitter:description" content="requests 摘要requests 支持多种HTTP请求类型，如get,put,delete,head,options,post, requests construct url with paraspayload = {&amp;apos;key1&amp;apos;: &amp;apos;value1&amp;apos;, &amp;apos;key2&amp;apos;: &amp;apos;value2&amp;apos;} r = requests">
@@ -213,16 +213,11 @@ s.auth = (&apos;user&apos;, &apos;pass&apos;)
 s.headers.update({&apos;x-test&apos;: &apos;true&apos;})
 # both &apos;x-test&apos; and &apos;x-test2&apos; are sent
 s.get(&apos;http://httpbin.org/headers&apos;, headers={&apos;x-test2&apos;: &apos;true&apos;})
-</code></pre><h2 id="requests-timeout"><a href="#requests-timeout" class="headerlink" title="requests timeout"></a>requests timeout</h2><p>为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。如果没有 timeout，你的代码可能会挂起若干分钟甚至更长时间。</p>
-<ul>
-<li>连接超时指的是在你的客户端实现到远端机器端口的连接时（对应的是<code>connect()</code>_），Request 会等待的秒数。</li>
-<li><p>读取超时指的就是客户端等待服务器发送请求的时间。（特定地，它指的是客户端要等待服务器发送字节之间的时间。在 99.9% 的情况下这指的是服务器发送第一个字节之前的时间）</p>
+</code></pre><h2 id="requests-timeout"><a href="#requests-timeout" class="headerlink" title="requests timeout"></a>requests timeout</h2><p>为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。如果没有 timeout，你的代码可能会挂起若干分钟甚至更长时间。<br>连接超时指的是在你的客户端实现到远端机器端口的连接时（对应的是<code>connect()</code>_），Request 会等待的秒数。<br>读取超时指的就是客户端等待服务器发送请求的时间。（特定地，它指的是客户端要等待服务器发送字节之间的时间。在 99.9% 的情况下这指的是服务器发送第一个字节之前的时间）</p>
 <pre><code>r = requests.get(&apos;https://github.com&apos;, timeout=5) # timeout second  for both connection and read
 r = requests.get(&apos;https://github.com&apos;, timeout=(3.05, 27)) # timeout for connection and read seperately
 r = requests.get(&apos;https://github.com&apos;, timeout=None) # never timeout 
-</code></pre></li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">requests 官方文档</a></p>
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">requests 官方文档</a></p>
 
       
 
@@ -306,20 +301,15 @@ r = requests.get(&apos;https://github.com&apos;, timeout=None) # never timeout
   
 <nav id="article-nav">
   
-    <a href="/2017/08/20/index/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/20/pip/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          hello world
+          pip
         
       </div>
     </a>
   
-  
-    <a href="/2017/08/20/pip/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">pip</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 

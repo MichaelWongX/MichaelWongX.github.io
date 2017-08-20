@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>gevent | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="gevent 摘要Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Greenlet(myfunction">
+  <meta name="description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gevent">
 <meta property="og:url" content="http://yoursite.com/2017/08/20/gevent/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="gevent 摘要Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Greenlet(myfunction">
-<meta property="og:updated_time" content="2017-08-20T03:36:22.245Z">
+<meta property="og:description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
+<meta property="og:updated_time" content="2017-08-20T08:01:08.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gevent">
-<meta name="twitter:description" content="gevent 摘要Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Greenlet(myfunction">
+<meta name="twitter:description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -152,7 +152,7 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="python-gevent" class="article article-type-python " itemscope itemprop="blogPost">
+            <article id="post-gevent" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -172,11 +172,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="gevent-摘要"><a href="#gevent-摘要" class="headerlink" title="gevent 摘要"></a>gevent 摘要</h1><h2 id="Greenlet-objects"><a href="#Greenlet-objects" class="headerlink" title="Greenlet objects"></a>Greenlet objects</h2><p>Greenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start():</p>
+        <p>一些关于gevent module的常见用法</p>
+<h2 id="Greenlet-objects"><a href="#Greenlet-objects" class="headerlink" title="Greenlet objects"></a>Greenlet objects</h2><p>Greenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start():</p>
 <pre><code>g = Greenlet(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1)
 g.start()
-
-g = Greenlet.spawn(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1) # the other way to create and run greenlet
+g = Greenlet.spawn(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1) # the other     way to create and run greenlet
 </code></pre><p><strong>class Greenlet</strong></p>
 <p>Greenlet.<strong>init</strong>(run=None, <em>args, *</em>kwargs)</p>
 <pre><code>Greenlet constructor.
@@ -188,12 +188,12 @@ Parameters:
 <li>Greenlet.value:hold the value returned by the function if the greenlet has finished successfully. or if it fnished in error,None</li>
 <li>Greenlet.exception:hold the exception instance raise by the function, or None</li>
 <li>Greenlet.start():schedule the greenlet to run in this loop iteration</li>
-<li>.start_later(seconds)</li>
-<li>.join(timeout=None):wait until the greenlet finishes or timeout expires</li>
-<li>.get(block=True, timeout=None):return the result of greenlet has returned or re-raise exception</li>
-<li>.kill(exception=GreenletExit, block=True, timeout=None)</li>
-<li>.link(callback)</li>
-<li>.link_value(callback):Like link() but callback is only notified when the greenlet has completed successfully.<h2 id="Spawn-helpers"><a href="#Spawn-helpers" class="headerlink" title="Spawn helpers"></a>Spawn helpers</h2></li>
+<li>start_later(seconds)</li>
+<li>join(timeout=None):wait until the greenlet finishes or timeout expires</li>
+<li>get(block=True, timeout=None):return the result of greenlet has returned or re-raise exception</li>
+<li>kill(exception=GreenletExit, block=True, timeout=None)</li>
+<li>link(callback)</li>
+<li>link_value(callback):Like link() but callback is only notified when the greenlet has completed successfully.<h2 id="Spawn-helpers"><a href="#Spawn-helpers" class="headerlink" title="Spawn helpers"></a>Spawn helpers</h2></li>
 <li>spawn(function, <em>args, **kwargs):Create a new Greenlet object and schedule it to run function(</em>args, **kwargs). This can be used as gevent.spawn or Greenlet.spawn.</li>
 <li>spawn_later(seconds, function, <em>args, *</em>kwargs)</li>
 <li>spawn_raw(function, <em>args, *</em>kwargs):This returns a raw greenlet which does not have all the useful methods that gevent.Greenlet has. Typically, applications should prefer spawn(), but this method may occasionally be useful as an optimization if there are many greenlets involved.<h2 id="Stopping-Greenlets"><a href="#Stopping-Greenlets" class="headerlink" title="Stopping Greenlets"></a>Stopping Greenlets</h2></li>
@@ -287,18 +287,18 @@ Parameters:
   
 <nav id="article-nav">
   
-    <a href="/2017/08/20/asyncio/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/20/index/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          asyncio
+          hello world
         
       </div>
     </a>
   
   
-    <a href="/2017/08/20/hello/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">hello</div>
+    <a href="/2017/08/20/pip/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">pip</div>
       <i class="icon-circle-right"></i>
     </a>
   

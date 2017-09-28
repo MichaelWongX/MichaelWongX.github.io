@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>gevent | 后花园</title>
+  <title>pycharm 2017.2.3 中的console soft wraps问题 | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
-<meta name="keywords" content="python">
+  <meta name="description" content="最近使用pycharm 2017遇到了一个奇怪的问题，在File-settings-general-console 设置中选中 “Use soft wraps in console”，但在python console中并没有出现“use soft wraps”按钮，也及soft wraps功能无法启用，导致信息水平输出过长，查看相应信息时需要左右移动。 经过相关查找，有网友支持指出需要在非选中“u">
+<meta name="keywords" content="pycharm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="gevent">
-<meta property="og:url" content="http://yoursite.com/2017/08/20/gevent/index.html">
+<meta property="og:title" content="pycharm 2017.2.3 中的console soft wraps问题">
+<meta property="og:url" content="http://yoursite.com/2017/09/28/pycharm/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
-<meta property="og:updated_time" content="2017-08-20T08:01:08.081Z">
+<meta property="og:description" content="最近使用pycharm 2017遇到了一个奇怪的问题，在File-settings-general-console 设置中选中 “Use soft wraps in console”，但在python console中并没有出现“use soft wraps”按钮，也及soft wraps功能无法启用，导致信息水平输出过长，查看相应信息时需要左右移动。 经过相关查找，有网友支持指出需要在非选中“u">
+<meta property="og:updated_time" content="2017-09-28T13:39:25.506Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="gevent">
-<meta name="twitter:description" content="一些关于gevent module的常见用法 Greenlet objectsGreenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start(): g = Green">
+<meta name="twitter:title" content="pycharm 2017.2.3 中的console soft wraps问题">
+<meta name="twitter:description" content="最近使用pycharm 2017遇到了一个奇怪的问题，在File-settings-general-console 设置中选中 “Use soft wraps in console”，但在python console中并没有出现“use soft wraps”按钮，也及soft wraps功能无法启用，导致信息水平输出过长，查看相应信息时需要左右移动。 经过相关查找，有网友支持指出需要在非选中“u">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -152,58 +152,28 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-gevent" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-pycharm" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      gevent
+      pycharm 2017.2.3 中的console soft wraps问题
     </h1>
   
 
         
-        <a href="/2017/08/20/gevent/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+        <a href="/2017/09/28/pycharm/" class="archive-article-date">
+  	<time datetime="2017-09-28T13:17:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一些关于gevent module的常见用法</p>
-<h2 id="Greenlet-objects"><a href="#Greenlet-objects" class="headerlink" title="Greenlet objects"></a>Greenlet objects</h2><p>Greenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start():</p>
-<pre><code>g = Greenlet(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1)
-g.start()
-g = Greenlet.spawn(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1) # the other     way to create and run greenlet
-</code></pre><p><strong>class Greenlet</strong></p>
-<p>Greenlet.<strong>init</strong>(run=None, <em>args, *</em>kwargs)</p>
-<pre><code>Greenlet constructor.
-Parameters:    
-    args – The arguments passed to the run function.
-    kwargs – The keyword arguments passed to the run function.
-    run – The callable object to run. If not given, this object’s _run method will be invoked (typically defined by subclasses).
-</code></pre><ul>
-<li>Greenlet.value:hold the value returned by the function if the greenlet has finished successfully. or if it fnished in error,None</li>
-<li>Greenlet.exception:hold the exception instance raise by the function, or None</li>
-<li>Greenlet.start():schedule the greenlet to run in this loop iteration</li>
-<li>start_later(seconds)</li>
-<li>join(timeout=None):wait until the greenlet finishes or timeout expires</li>
-<li>get(block=True, timeout=None):return the result of greenlet has returned or re-raise exception</li>
-<li>kill(exception=GreenletExit, block=True, timeout=None)</li>
-<li>link(callback)</li>
-<li>link_value(callback):Like link() but callback is only notified when the greenlet has completed successfully.<h2 id="Spawn-helpers"><a href="#Spawn-helpers" class="headerlink" title="Spawn helpers"></a>Spawn helpers</h2></li>
-<li>spawn(function, <em>args, **kwargs):Create a new Greenlet object and schedule it to run function(</em>args, **kwargs). This can be used as gevent.spawn or Greenlet.spawn.</li>
-<li>spawn_later(seconds, function, <em>args, *</em>kwargs)</li>
-<li>spawn_raw(function, <em>args, *</em>kwargs):This returns a raw greenlet which does not have all the useful methods that gevent.Greenlet has. Typically, applications should prefer spawn(), but this method may occasionally be useful as an optimization if there are many greenlets involved.<h2 id="Stopping-Greenlets"><a href="#Stopping-Greenlets" class="headerlink" title="Stopping Greenlets"></a>Stopping Greenlets</h2></li>
-<li>kill(greenlet, exception=GreenletExit)</li>
-<li>killall(greenlets, exception=GreenletExit, block=True, timeout=None)<h2 id="Waiting"><a href="#Waiting" class="headerlink" title="Waiting"></a>Waiting</h2></li>
-<li>wait(objects=None, timeout=None, count=None):Wait for objects to become ready or for event loop to finish.the objects can be  gevent.Greenlet,gevent.event.Event,gevent.lock.Semaphore,gevent.subprocess.Popen.</li>
-<li>iwait(objects, timeout=None, count=None):Iteratively yield objects as they are ready, until all (or count) are ready or timeout expired.</li>
-<li>joinall(greenlets, timeout=None, raise_error=False, count=None):return A sequence of the greenlets that finished before the timeout (if any) expired.<h2 id="gevent-pool-or-group"><a href="#gevent-pool-or-group" class="headerlink" title="gevent.pool or group"></a>gevent.pool or group</h2>The Group class in this module abstracts a group of running greenlets. When a greenlet dies, it’s automatically removed from the group. All running greenlets in a group can be waited on with Group.join(), or all running greenlets can be killed with Group.kill().The Pool class, which is a subclass of Group, provides a way to limit concurrency.</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.gevent.org/" title="gevent" target="_blank" rel="external">http://www.gevent.org/</a></p>
+        <p>最近使用pycharm 2017遇到了一个奇怪的问题，在File-settings-general-console 设置中选中 “Use soft wraps in console”，但在python console中并没有出现“use soft wraps”按钮，也及soft wraps功能无法启用，导致信息水平输出过长，查看相应信息时需要左右移动。</p>
+<p>经过相关查找，有网友支持指出需要在非选中“use soft wraps”中的情况下，关闭pycharm；然后再打开软件，再次选中“use soft wraps”即可。按照上述操作，确实能解决相关问题，但不同的时，在我个人电脑上，即使保持选中状态，重开软件后“use soft wraps”仍可保持使用，<br>真是一个奇怪的bug！<br>参见<a href="https://youtrack.jetbrains.com/issue/PY-22123" title="link" target="_blank" rel="external">https://youtrack.jetbrains.com/issue/PY-22123</a></p>
 
       
 
@@ -217,7 +187,7 @@ Parameters:
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pycharm</a>
         		</li>
       		
 		</ul>
@@ -273,7 +243,7 @@ Parameters:
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/08/20/gevent/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/09/28/pycharm/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -287,18 +257,9 @@ Parameters:
   
 <nav id="article-nav">
   
-    <a href="/2017/08/20/asyncio/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          asyncio
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/08/20/pip/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">pip</div>
+    <a href="/2017/09/16/newpost/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">newpost</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -173,7 +173,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近使用pycharm 2017遇到了一个奇怪的问题，在File-settings-general-console 设置中选中 “Use soft wraps in console”，但在python console中并没有出现“use soft wraps”按钮，也及soft wraps功能无法启用，导致信息水平输出过长，查看相应信息时需要左右移动。</p>
-<p>经过相关查找，有网友支持指出需要在非选中“use soft wraps”中的情况下，关闭pycharm；然后再打开软件，再次选中“use soft wraps”即可。按照上述操作，确实能解决相关问题，但不同的时，在我个人电脑上，即使保持选中状态，重开软件后“use soft wraps”仍可保持使用，<br>真是一个奇怪的bug！<br>参见<a href="https://youtrack.jetbrains.com/issue/PY-22123" title="link" target="_blank" rel="external">https://youtrack.jetbrains.com/issue/PY-22123</a></p>
+<p>经过相关查找，有网友支持指出需要在非选中“use soft wraps”中的情况下，关闭pycharm；然后再打开软件，再次选中“use soft wraps”即可。按照上述操作，确实能解决相关问题，但不同的是，在我个人电脑上，即使保持选中状态，重开软件后“use soft wraps”仍可保持使用，</p>
+<p>参见<a href="https://youtrack.jetbrains.com/issue/PY-22123" title="link" target="_blank" rel="external">https://youtrack.jetbrains.com/issue/PY-22123</a></p>
 
       
 
@@ -332,120 +333,6 @@ Parameters:
 
 
   
-    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/20/asyncio/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>asyncio 学习笔记</strong></p>
-<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
-<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
-<ul>
-<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
-<li>the object obtained by calling a coroutine function.</li>
-</ul>
-<p>Things a coroutine can do:</p>
-<ul>
-<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
-<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
-<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
-<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
-</ul>
-<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
-<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
-<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
-<li>.stop()</li>
-<li>.close()</li>
-<li>.run_in_executor(f)</li>
-</ul>
-<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
-<ul>
-<li>AbstractEventLoop.call_soon（callback, *args).</li>
-<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
-<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
-<li>.call_at(when, callback, *args)</li>
-</ul>
-<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
-<ul>
-<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
-<li>.exception()<br>  Return the exception that was set on this future.</li>
-<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
-</ul>
-<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
-<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
-<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
-<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
-</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
-<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -480,111 +367,6 @@ Parameters:
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/08/20/index/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/pip/">pip</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/20/pip/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
-<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
-<pre><code>pip install SomePackage
-pip install Some-1.0-py2-py3-none-any.whl
-pip show --file SomePackage
-pip list --outdated
-pip install --upgrade SomePackage
-pip uninstall SomePackage
-</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
-<pre><code>pip install SomePackage # latest version
-pip install SomePackage==1.1.1 #specific ver
-pip install SomePackage&gt;=1.11 # minimum ver
-</code></pre><p>2.install a list of requirements specified in a file</p>
-<pre><code>pip install -r requirements.txt
-</code></pre><p>3.upgrade an already installed Somepackage</p>
-<pre><code>pip install --upgrade SomePackage
-</code></pre><p>4.intall a local project in “editable” mode</p>
-<pre><code>pip install -e path/to/project
-</code></pre><p>5.install a source archive file</p>
-<pre><code>pip isntall ./download-tar.gz
-pip install http://my.rep/Somapack.zip
-</code></pre><p>6.install from alterantivate package repositories</p>
-<pre><code>pip install --index-url http://example.com/simple SomePackage
-pip install --no-index --find-links=file:///local/dir SomePackage
-pip install --no-index --find-links=relative/dir SomePackage
-</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
-<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
-</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
-<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
-</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
-<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
         </p>
       
 
@@ -704,6 +486,225 @@ r = requests.get(&apos;https://github.com&apos;, timeout=None) # never timeout
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/08/20/requests/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/20/asyncio/" class="archive-article-date">
+  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>asyncio 学习笔记</strong></p>
+<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
+<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
+<ul>
+<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
+<li>the object obtained by calling a coroutine function.</li>
+</ul>
+<p>Things a coroutine can do:</p>
+<ul>
+<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
+<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
+<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
+<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
+</ul>
+<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
+<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
+<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
+<li>.stop()</li>
+<li>.close()</li>
+<li>.run_in_executor(f)</li>
+</ul>
+<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
+<ul>
+<li>AbstractEventLoop.call_soon（callback, *args).</li>
+<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
+<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
+<li>.call_at(when, callback, *args)</li>
+</ul>
+<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
+<ul>
+<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
+<li>.exception()<br>  Return the exception that was set on this future.</li>
+<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
+</ul>
+<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
+<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
+<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
+</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
+<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/20/pip/">pip</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/20/pip/" class="archive-article-date">
+  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
+<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
+<pre><code>pip install SomePackage
+pip install Some-1.0-py2-py3-none-any.whl
+pip show --file SomePackage
+pip list --outdated
+pip install --upgrade SomePackage
+pip uninstall SomePackage
+</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
+<pre><code>pip install SomePackage # latest version
+pip install SomePackage==1.1.1 #specific ver
+pip install SomePackage&gt;=1.11 # minimum ver
+</code></pre><p>2.install a list of requirements specified in a file</p>
+<pre><code>pip install -r requirements.txt
+</code></pre><p>3.upgrade an already installed Somepackage</p>
+<pre><code>pip install --upgrade SomePackage
+</code></pre><p>4.intall a local project in “editable” mode</p>
+<pre><code>pip install -e path/to/project
+</code></pre><p>5.install a source archive file</p>
+<pre><code>pip isntall ./download-tar.gz
+pip install http://my.rep/Somapack.zip
+</code></pre><p>6.install from alterantivate package repositories</p>
+<pre><code>pip install --index-url http://example.com/simple SomePackage
+pip install --no-index --find-links=file:///local/dir SomePackage
+pip install --no-index --find-links=relative/dir SomePackage
+</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
+<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
+</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
+<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
+</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
+<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
         </p>
       
 

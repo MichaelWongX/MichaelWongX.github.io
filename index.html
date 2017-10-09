@@ -228,139 +228,6 @@
 
 
   
-    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/pip/">pip</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/20/pip/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09</p>
-<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
-[global]
-timeout = 30
-index-url = https://pypi.doubanio.com/simple
-
-也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
-
-
-anaconda或者miniconda 同样可以通过添加国内下载通道加速。
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --set show_channel_urls yes
-
-
-pip 配置文件
-可以通过配置文件设置pip，配置文件有多个层次。
-</code></pre><p>1.单用户<br>    unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>    macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>    windows配置文件位置为 %APPDATA%\pip\pip.ini</p>
-<pre><code>在老式系统中，配置也可能在其他位置
-unix 和macOS系统 $HOME/.pip/pip.conf
-windows系统%HOME\pip\pip.ini
-</code></pre><ol>
-<li><p>在虚拟环境中<br> 在虚拟环境中，配置我呢见pip.conf 或Pip.ini在虚拟环境根目录</p>
-</li>
-<li><p>系统配置</p>
-<p> On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br> On macOS the file is: /Library/Application Support/pip/pip.conf<br> On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br> On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br> Site-wide configuration is not supported on Windows Vista</p>
-</li>
-</ol>
-<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
-<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
-<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
-<pre><code>pip install SomePackage
-pip install Some-1.0-py2-py3-none-any.whl
-pip show --file SomePackage
-pip list --outdated
-pip install --upgrade SomePackage
-pip uninstall SomePackage
-</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
-<pre><code>pip install SomePackage # latest version
-pip install SomePackage==1.1.1 #specific ver
-pip install SomePackage&gt;=1.11 # minimum ver
-</code></pre><p>2.install a list of requirements specified in a file</p>
-<pre><code>pip install -r requirements.txt
-</code></pre><p>3.upgrade an already installed Somepackage</p>
-<pre><code>pip install --upgrade SomePackage
-</code></pre><p>4.intall a local project in “editable” mode</p>
-<pre><code>pip install -e path/to/project
-</code></pre><p>5.install a source archive file</p>
-<pre><code>pip isntall ./download-tar.gz
-pip install http://my.rep/Somapack.zip
-</code></pre><p>6.install from alterantivate package repositories</p>
-<pre><code>pip install --index-url http://example.com/simple SomePackage
-pip install --no-index --find-links=file:///local/dir SomePackage
-pip install --no-index --find-links=relative/dir SomePackage
-</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
-<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
-</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
-<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
-</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
-<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -475,6 +342,111 @@ pip install --no-index --find-links=relative/dir SomePackage
 
 
   
+    <article id="post-gevent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/20/gevent/">gevent</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/20/gevent/" class="archive-article-date">
+  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一些关于gevent module的常见用法</p>
+<h2 id="Greenlet-objects"><a href="#Greenlet-objects" class="headerlink" title="Greenlet objects"></a>Greenlet objects</h2><p>Greenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start():</p>
+<pre><code>g = Greenlet(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1)
+g.start()
+g = Greenlet.spawn(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1) # the other     way to create and run greenlet
+</code></pre><p><strong>class Greenlet</strong></p>
+<p>Greenlet.<strong>init</strong>(run=None, <em>args, *</em>kwargs)</p>
+<pre><code>Greenlet constructor.
+Parameters:    
+    args – The arguments passed to the run function.
+    kwargs – The keyword arguments passed to the run function.
+    run – The callable object to run. If not given, this object’s _run method will be invoked (typically defined by subclasses).
+</code></pre><ul>
+<li>Greenlet.value:hold the value returned by the function if the greenlet has finished successfully. or if it fnished in error,None</li>
+<li>Greenlet.exception:hold the exception instance raise by the function, or None</li>
+<li>Greenlet.start():schedule the greenlet to run in this loop iteration</li>
+<li>start_later(seconds)</li>
+<li>join(timeout=None):wait until the greenlet finishes or timeout expires</li>
+<li>get(block=True, timeout=None):return the result of greenlet has returned or re-raise exception</li>
+<li>kill(exception=GreenletExit, block=True, timeout=None)</li>
+<li>link(callback)</li>
+<li>link_value(callback):Like link() but callback is only notified when the greenlet has completed successfully.<h2 id="Spawn-helpers"><a href="#Spawn-helpers" class="headerlink" title="Spawn helpers"></a>Spawn helpers</h2></li>
+<li>spawn(function, <em>args, **kwargs):Create a new Greenlet object and schedule it to run function(</em>args, **kwargs). This can be used as gevent.spawn or Greenlet.spawn.</li>
+<li>spawn_later(seconds, function, <em>args, *</em>kwargs)</li>
+<li>spawn_raw(function, <em>args, *</em>kwargs):This returns a raw greenlet which does not have all the useful methods that gevent.Greenlet has. Typically, applications should prefer spawn(), but this method may occasionally be useful as an optimization if there are many greenlets involved.<h2 id="Stopping-Greenlets"><a href="#Stopping-Greenlets" class="headerlink" title="Stopping Greenlets"></a>Stopping Greenlets</h2></li>
+<li>kill(greenlet, exception=GreenletExit)</li>
+<li>killall(greenlets, exception=GreenletExit, block=True, timeout=None)<h2 id="Waiting"><a href="#Waiting" class="headerlink" title="Waiting"></a>Waiting</h2></li>
+<li>wait(objects=None, timeout=None, count=None):Wait for objects to become ready or for event loop to finish.the objects can be  gevent.Greenlet,gevent.event.Event,gevent.lock.Semaphore,gevent.subprocess.Popen.</li>
+<li>iwait(objects, timeout=None, count=None):Iteratively yield objects as they are ready, until all (or count) are ready or timeout expired.</li>
+<li>joinall(greenlets, timeout=None, raise_error=False, count=None):return A sequence of the greenlets that finished before the timeout (if any) expired.<h2 id="gevent-pool-or-group"><a href="#gevent-pool-or-group" class="headerlink" title="gevent.pool or group"></a>gevent.pool or group</h2>The Group class in this module abstracts a group of running greenlets. When a greenlet dies, it’s automatically removed from the group. All running greenlets in a group can be waited on with Group.join(), or all running greenlets can be killed with Group.kill().The Pool class, which is a subclass of Group, provides a way to limit concurrency.</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.gevent.org/" title="gevent" target="_blank" rel="external">http://www.gevent.org/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/20/gevent/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -509,6 +481,139 @@ pip install --no-index --find-links=relative/dir SomePackage
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/08/20/index/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/20/pip/">pip</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/20/pip/" class="archive-article-date">
+  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09</p>
+<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
+[global]
+timeout = 30
+index-url = https://pypi.doubanio.com/simple
+
+也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
+
+
+anaconda或者miniconda 同样可以通过添加国内下载通道加速。
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+
+
+pip 配置文件
+可以通过配置文件设置pip，配置文件有多个层次。
+</code></pre><ol>
+<li><p>单用户</p>
+<p> unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br> macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br> windows配置文件位置为 %APPDATA%\pip\pip.ini<br> 在老式系统中，配置也可能在其他位置<br> unix 和macOS系统 $HOME/.pip/pip.conf<br> windows系统%HOME\pip\pip.ini</p>
+</li>
+<li><p>在虚拟环境中</p>
+<p> 在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
+</li>
+<li><p>系统配置</p>
+<p> On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br> On macOS the file is: /Library/Application Support/pip/pip.conf<br> On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br> On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br> Site-wide configuration is not supported on Windows Vista</p>
+</li>
+</ol>
+<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
+<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
+<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
+<pre><code>pip install SomePackage
+pip install Some-1.0-py2-py3-none-any.whl
+pip show --file SomePackage
+pip list --outdated
+pip install --upgrade SomePackage
+pip uninstall SomePackage
+</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
+<pre><code>pip install SomePackage # latest version
+pip install SomePackage==1.1.1 #specific ver
+pip install SomePackage&gt;=1.11 # minimum ver
+</code></pre><p>2.install a list of requirements specified in a file</p>
+<pre><code>pip install -r requirements.txt
+</code></pre><p>3.upgrade an already installed Somepackage</p>
+<pre><code>pip install --upgrade SomePackage
+</code></pre><p>4.intall a local project in “editable” mode</p>
+<pre><code>pip install -e path/to/project
+</code></pre><p>5.install a source archive file</p>
+<pre><code>pip isntall ./download-tar.gz
+pip install http://my.rep/Somapack.zip
+</code></pre><p>6.install from alterantivate package repositories</p>
+<pre><code>pip install --index-url http://example.com/simple SomePackage
+pip install --no-index --find-links=file:///local/dir SomePackage
+pip install --no-index --find-links=relative/dir SomePackage
+</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
+<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
+</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
+<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
+</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
+<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
         </p>
       
 
@@ -628,111 +733,6 @@ r = requests.get(&apos;https://github.com&apos;, timeout=None) # never timeout
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/08/20/requests/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-gevent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/gevent/">gevent</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/20/gevent/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一些关于gevent module的常见用法</p>
-<h2 id="Greenlet-objects"><a href="#Greenlet-objects" class="headerlink" title="Greenlet objects"></a>Greenlet objects</h2><p>Greenlet is a light-weight cooperatively-scheduled execution unit. pass the target function and its arguments to Greenlet constructor and call start():</p>
-<pre><code>g = Greenlet(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1)
-g.start()
-g = Greenlet.spawn(myfunction, &apos;arg1&apos;, &apos;arg2&apos;, kwarg1=1) # the other     way to create and run greenlet
-</code></pre><p><strong>class Greenlet</strong></p>
-<p>Greenlet.<strong>init</strong>(run=None, <em>args, *</em>kwargs)</p>
-<pre><code>Greenlet constructor.
-Parameters:    
-    args – The arguments passed to the run function.
-    kwargs – The keyword arguments passed to the run function.
-    run – The callable object to run. If not given, this object’s _run method will be invoked (typically defined by subclasses).
-</code></pre><ul>
-<li>Greenlet.value:hold the value returned by the function if the greenlet has finished successfully. or if it fnished in error,None</li>
-<li>Greenlet.exception:hold the exception instance raise by the function, or None</li>
-<li>Greenlet.start():schedule the greenlet to run in this loop iteration</li>
-<li>start_later(seconds)</li>
-<li>join(timeout=None):wait until the greenlet finishes or timeout expires</li>
-<li>get(block=True, timeout=None):return the result of greenlet has returned or re-raise exception</li>
-<li>kill(exception=GreenletExit, block=True, timeout=None)</li>
-<li>link(callback)</li>
-<li>link_value(callback):Like link() but callback is only notified when the greenlet has completed successfully.<h2 id="Spawn-helpers"><a href="#Spawn-helpers" class="headerlink" title="Spawn helpers"></a>Spawn helpers</h2></li>
-<li>spawn(function, <em>args, **kwargs):Create a new Greenlet object and schedule it to run function(</em>args, **kwargs). This can be used as gevent.spawn or Greenlet.spawn.</li>
-<li>spawn_later(seconds, function, <em>args, *</em>kwargs)</li>
-<li>spawn_raw(function, <em>args, *</em>kwargs):This returns a raw greenlet which does not have all the useful methods that gevent.Greenlet has. Typically, applications should prefer spawn(), but this method may occasionally be useful as an optimization if there are many greenlets involved.<h2 id="Stopping-Greenlets"><a href="#Stopping-Greenlets" class="headerlink" title="Stopping Greenlets"></a>Stopping Greenlets</h2></li>
-<li>kill(greenlet, exception=GreenletExit)</li>
-<li>killall(greenlets, exception=GreenletExit, block=True, timeout=None)<h2 id="Waiting"><a href="#Waiting" class="headerlink" title="Waiting"></a>Waiting</h2></li>
-<li>wait(objects=None, timeout=None, count=None):Wait for objects to become ready or for event loop to finish.the objects can be  gevent.Greenlet,gevent.event.Event,gevent.lock.Semaphore,gevent.subprocess.Popen.</li>
-<li>iwait(objects, timeout=None, count=None):Iteratively yield objects as they are ready, until all (or count) are ready or timeout expired.</li>
-<li>joinall(greenlets, timeout=None, raise_error=False, count=None):return A sequence of the greenlets that finished before the timeout (if any) expired.<h2 id="gevent-pool-or-group"><a href="#gevent-pool-or-group" class="headerlink" title="gevent.pool or group"></a>gevent.pool or group</h2>The Group class in this module abstracts a group of running greenlets. When a greenlet dies, it’s automatically removed from the group. All running greenlets in a group can be waited on with Group.join(), or all running greenlets can be killed with Group.kill().The Pool class, which is a subclass of Group, provides a way to limit concurrency.</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.gevent.org/" title="gevent" target="_blank" rel="external">http://www.gevent.org/</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/gevent/">展开全文 >></a>
         </p>
       
 

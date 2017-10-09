@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>pip | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="pip 摘要pip is already installed if you are using python 2 &amp;gt;=2.7.9 or python 3 &amp;gt;= 3.4 binaries downloaded from python.org.or you can install pip through get-pip.py. get-pip.py will also install se">
+  <meta name="description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pip">
 <meta property="og:url" content="http://yoursite.com/2017/08/20/pip/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="pip 摘要pip is already installed if you are using python 2 &amp;gt;=2.7.9 or python 3 &amp;gt;= 3.4 binaries downloaded from python.org.or you can install pip through get-pip.py. get-pip.py will also install se">
-<meta property="og:updated_time" content="2017-08-20T08:14:17.815Z">
+<meta property="og:description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
+<meta property="og:updated_time" content="2017-10-09T00:32:04.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pip">
-<meta name="twitter:description" content="pip 摘要pip is already installed if you are using python 2 &amp;gt;=2.7.9 or python 3 &amp;gt;= 3.4 binaries downloaded from python.org.or you can install pip through get-pip.py. get-pip.py will also install se">
+<meta name="twitter:description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -172,7 +172,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09</p>
+<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
+[global]
+timeout = 30
+index-url = https://pypi.doubanio.com/simple
+
+也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
+
+
+anaconda或者miniconda 同样可以通过添加国内下载通道加速。
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+
+
+pip 配置文件
+可以通过配置文件设置pip，配置文件有多个层次。
+</code></pre><p>1.单用户<br>    unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>    macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>    windows配置文件位置为 %APPDATA%\pip\pip.ini</p>
+<pre><code>在老式系统中，配置也可能在其他位置
+unix 和macOS系统 $HOME/.pip/pip.conf
+windows系统%HOME\pip\pip.ini
+</code></pre><ol>
+<li><p>在虚拟环境中<br> 在虚拟环境中，配置我呢见pip.conf 或Pip.ini在虚拟环境根目录</p>
+</li>
+<li><p>系统配置</p>
+<p> On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br> On macOS the file is: /Library/Application Support/pip/pip.conf<br> On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br> On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br> Site-wide configuration is not supported on Windows Vista</p>
+</li>
+</ol>
+<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
+<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
 <p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
 <pre><code>pip install SomePackage
 pip install Some-1.0-py2-py3-none-any.whl
@@ -287,15 +315,20 @@ pip install --no-index --find-links=relative/dir SomePackage
   
 <nav id="article-nav">
   
-    <a href="/2017/08/20/asyncio/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/28/pycharm/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          asyncio
+          pycharm 2017.2.3 中的console soft wraps问题
         
       </div>
     </a>
   
+  
+    <a href="/2017/08/20/asyncio/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">asyncio</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

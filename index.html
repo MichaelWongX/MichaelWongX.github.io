@@ -228,19 +228,19 @@
 
 
   
-    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
+      <a class="article-title" href="/2017/08/20/pip/">pip</a>
     </h1>
   
 
         
-        <a href="/2017/08/20/asyncio/" class="archive-article-date">
+        <a href="/2017/08/20/pip/" class="archive-article-date">
   	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
 </a>
         
@@ -248,47 +248,66 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>asyncio 学习笔记</strong></p>
-<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
-<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
-<ul>
-<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
-<li>the object obtained by calling a coroutine function.</li>
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09<br>    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建）</p>
+<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
+[global]
+timeout = 30
+index-url = https://pypi.doubanio.com/simple
+
+也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
+
+
+anaconda或者miniconda 同样可以通过添加国内下载通道加速。
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+
+
+pip 配置文件
+可以通过配置文件设置pip，配置文件有多个层次。
+</code></pre><ul>
+<li><p>单用户</p>
+<p>  unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>  macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>  windows配置文件位置为 %APPDATA%\pip\pip.ini<br>  在老式系统中，配置也可能在其他位置<br>  unix 和macOS系统 $HOME/.pip/pip.conf<br>  windows系统%HOME\pip\pip.ini</p>
+</li>
+<li><p>在虚拟环境中</p>
+<p>  在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
+</li>
+<li><p>系统配置</p>
+<p>  On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br>  On macOS the file is: /Library/Application Support/pip/pip.conf<br>  On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br>  On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br>  Site-wide configuration is not supported on Windows Vista</p>
+</li>
 </ul>
-<p>Things a coroutine can do:</p>
-<ul>
-<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
-<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
-<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
-<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
-</ul>
-<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
-<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
-<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
-<li>.stop()</li>
-<li>.close()</li>
-<li>.run_in_executor(f)</li>
-</ul>
-<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
-<ul>
-<li>AbstractEventLoop.call_soon（callback, *args).</li>
-<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
-<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
-<li>.call_at(when, callback, *args)</li>
-</ul>
-<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
-<ul>
-<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
-<li>.exception()<br>  Return the exception that was set on this future.</li>
-<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
-</ul>
-<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
-<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
-<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
-<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
-</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
-<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
+<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
+<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
+<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
+<pre><code>pip install SomePackage
+pip install Some-1.0-py2-py3-none-any.whl
+pip show --file SomePackage
+pip list --outdated
+pip install --upgrade SomePackage
+pip uninstall SomePackage
+</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
+<pre><code>pip install SomePackage # latest version
+pip install SomePackage==1.1.1 #specific ver
+pip install SomePackage&gt;=1.11 # minimum ver
+</code></pre><p>2.install a list of requirements specified in a file</p>
+<pre><code>pip install -r requirements.txt
+</code></pre><p>3.upgrade an already installed Somepackage</p>
+<pre><code>pip install --upgrade SomePackage
+</code></pre><p>4.intall a local project in “editable” mode</p>
+<pre><code>pip install -e path/to/project
+</code></pre><p>5.install a source archive file</p>
+<pre><code>pip isntall ./download-tar.gz
+pip install http://my.rep/Somapack.zip
+</code></pre><p>6.install from alterantivate package repositories</p>
+<pre><code>pip install --index-url http://example.com/simple SomePackage
+pip install --no-index --find-links=file:///local/dir SomePackage
+pip install --no-index --find-links=relative/dir SomePackage
+</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
+<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
+</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
+<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
+</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
+<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
 
       
 
@@ -312,7 +331,70 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/20/index/">hello world</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/20/index/" class="archive-article-date">
+  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Hello-world！"><a href="#Hello-world！" class="headerlink" title="Hello world！"></a>Hello world！</h1><p><strong> 一个简单记录学习成长的地方！ </strong></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/20/index/">展开全文 >></a>
         </p>
       
 
@@ -447,19 +529,19 @@ Parameters:
 
 
   
-    <article id="post-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/index/">hello world</a>
+      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
     </h1>
   
 
         
-        <a href="/2017/08/20/index/" class="archive-article-date">
+        <a href="/2017/08/20/asyncio/" class="archive-article-date">
   	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
 </a>
         
@@ -467,129 +549,47 @@ Parameters:
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Hello-world！"><a href="#Hello-world！" class="headerlink" title="Hello world！"></a>Hello world！</h1><p><strong> 一个简单记录学习成长的地方！ </strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/index/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/pip/">pip</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/20/pip/" class="archive-article-date">
-  	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09</p>
-<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
-[global]
-timeout = 30
-index-url = https://pypi.doubanio.com/simple
-
-也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
-
-
-anaconda或者miniconda 同样可以通过添加国内下载通道加速。
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --set show_channel_urls yes
-
-
-pip 配置文件
-可以通过配置文件设置pip，配置文件有多个层次。
-</code></pre><ol>
-<li><p>单用户</p>
-<p> unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br> macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br> windows配置文件位置为 %APPDATA%\pip\pip.ini<br> 在老式系统中，配置也可能在其他位置<br> unix 和macOS系统 $HOME/.pip/pip.conf<br> windows系统%HOME\pip\pip.ini</p>
-</li>
-<li><p>在虚拟环境中</p>
-<p> 在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
-</li>
-<li><p>系统配置</p>
-<p> On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br> On macOS the file is: /Library/Application Support/pip/pip.conf<br> On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br> On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br> Site-wide configuration is not supported on Windows Vista</p>
-</li>
-</ol>
-<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
-<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
-<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
-<pre><code>pip install SomePackage
-pip install Some-1.0-py2-py3-none-any.whl
-pip show --file SomePackage
-pip list --outdated
-pip install --upgrade SomePackage
-pip uninstall SomePackage
-</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
-<pre><code>pip install SomePackage # latest version
-pip install SomePackage==1.1.1 #specific ver
-pip install SomePackage&gt;=1.11 # minimum ver
-</code></pre><p>2.install a list of requirements specified in a file</p>
-<pre><code>pip install -r requirements.txt
-</code></pre><p>3.upgrade an already installed Somepackage</p>
-<pre><code>pip install --upgrade SomePackage
-</code></pre><p>4.intall a local project in “editable” mode</p>
-<pre><code>pip install -e path/to/project
-</code></pre><p>5.install a source archive file</p>
-<pre><code>pip isntall ./download-tar.gz
-pip install http://my.rep/Somapack.zip
-</code></pre><p>6.install from alterantivate package repositories</p>
-<pre><code>pip install --index-url http://example.com/simple SomePackage
-pip install --no-index --find-links=file:///local/dir SomePackage
-pip install --no-index --find-links=relative/dir SomePackage
-</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
-<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
-</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
-<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
-</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
-<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
+        <p><strong>asyncio 学习笔记</strong></p>
+<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
+<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
+<ul>
+<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
+<li>the object obtained by calling a coroutine function.</li>
+</ul>
+<p>Things a coroutine can do:</p>
+<ul>
+<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
+<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
+<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
+<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
+</ul>
+<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
+<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
+<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
+<li>.stop()</li>
+<li>.close()</li>
+<li>.run_in_executor(f)</li>
+</ul>
+<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
+<ul>
+<li>AbstractEventLoop.call_soon（callback, *args).</li>
+<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
+<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
+<li>.call_at(when, callback, *args)</li>
+</ul>
+<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
+<ul>
+<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
+<li>.exception()<br>  Return the exception that was set on this future.</li>
+<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
+</ul>
+<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
+<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
+<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
+</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
+<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
 
       
 
@@ -613,7 +613,7 @@ pip install --no-index --find-links=relative/dir SomePackage
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
         </p>
       
 

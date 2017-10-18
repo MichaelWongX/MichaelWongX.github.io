@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>pip | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
+  <meta name="description" content="pip 摘要新增：2017-10-09    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建） 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 in">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pip">
 <meta property="og:url" content="http://yoursite.com/2017/08/20/pip/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
-<meta property="og:updated_time" content="2017-10-09T00:39:03.960Z">
+<meta property="og:description" content="pip 摘要新增：2017-10-09    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建） 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 in">
+<meta property="og:updated_time" content="2017-10-18T12:59:27.702Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pip">
-<meta name="twitter:description" content="pip 摘要新增：2017-10-09 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 index-url = https://pypi.doubanio.com/simple  也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple   anacon">
+<meta name="twitter:description" content="pip 摘要新增：2017-10-09    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建） 修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini [global] timeout = 30 in">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -172,7 +172,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09</p>
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09<br>    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建）</p>
 <pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
 [global]
 timeout = 30
@@ -188,17 +188,17 @@ conda config --set show_channel_urls yes
 
 pip 配置文件
 可以通过配置文件设置pip，配置文件有多个层次。
-</code></pre><ol>
+</code></pre><ul>
 <li><p>单用户</p>
-<p> unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br> macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br> windows配置文件位置为 %APPDATA%\pip\pip.ini<br> 在老式系统中，配置也可能在其他位置<br> unix 和macOS系统 $HOME/.pip/pip.conf<br> windows系统%HOME\pip\pip.ini</p>
+<p>  unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>  macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>  windows配置文件位置为 %APPDATA%\pip\pip.ini<br>  在老式系统中，配置也可能在其他位置<br>  unix 和macOS系统 $HOME/.pip/pip.conf<br>  windows系统%HOME\pip\pip.ini</p>
 </li>
 <li><p>在虚拟环境中</p>
-<p> 在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
+<p>  在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
 </li>
 <li><p>系统配置</p>
-<p> On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br> On macOS the file is: /Library/Application Support/pip/pip.conf<br> On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br> On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br> Site-wide configuration is not supported on Windows Vista</p>
+<p>  On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br>  On macOS the file is: /Library/Application Support/pip/pip.conf<br>  On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br>  On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br>  Site-wide configuration is not supported on Windows Vista</p>
 </li>
-</ol>
+</ul>
 <p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
 <p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
 <p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
@@ -315,18 +315,18 @@ pip install --no-index --find-links=relative/dir SomePackage
   
 <nav id="article-nav">
   
-    <a href="/2017/08/20/index/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/28/pycharm/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          hello world
+          pycharm 2017.2.3 中的console soft wraps问题
         
       </div>
     </a>
   
   
-    <a href="/2017/08/20/requests/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">requests</div>
+    <a href="/2017/08/20/index/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">hello world</div>
       <i class="icon-circle-right"></i>
     </a>
   

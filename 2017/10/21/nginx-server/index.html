@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: pycharm | 后花园</title>
+  <title>nginx server | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="随便写写东东西西">
-<meta property="og:type" content="website">
-<meta property="og:title" content="后花园">
-<meta property="og:url" content="http://yoursite.com/tags/pycharm/index.html">
+  <meta name="description" content="在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结  安装nginx sudo yum install nginx 配置nginx nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx server">
+<meta property="og:url" content="http://yoursite.com/2017/10/21/nginx-server/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="随便写写东东西西">
+<meta property="og:description" content="在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结  安装nginx sudo yum install nginx 配置nginx nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，">
+<meta property="og:updated_time" content="2017-10-21T09:40:56.919Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="后花园">
-<meta name="twitter:description" content="随便写写东东西西">
+<meta name="twitter:title" content="nginx server">
+<meta name="twitter:description" content="在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结  安装nginx sudo yum install nginx 配置nginx nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -150,60 +152,181 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-nginx-server" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/28/pycharm/" class="archive-article-date">
-  	<time datetime="2017-09-28T13:17:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/28/pycharm/">pycharm 2017.2.3 中的console soft wraps问题</a>
+    <h1 class="article-title" itemprop="name">
+      nginx server
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/10/21/nginx-server/" class="archive-article-date">
+  	<time datetime="2017-10-21T06:47:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结</p>
+<ol>
+<li>安装nginx<br> <code>sudo yum install nginx</code></li>
+<li>配置nginx<br> nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，内容如下：</li>
+</ol>
+<blockquote>
+<p>server {<br>       listen 9000;<br>       location / {<br>                   auth_basic “Restricted”;<br>                   auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  proxy_pass <a href="http://127.0.0.1：6800" target="_blank" rel="external">http://127.0.0.1：6800</a>; # scrayd listent ip and port<br>                   proxy_set_header X-Real-IP  $remote_addr;<br>                   proxy_set_header X-Forwarded-For $remote_addr;<br>                   proxy_set_header Host $host;<br>                   }<br>       }</p>
+</blockquote>
+<ol>
+<li>配置认证文件<br> 使用htpasswd命令生产认证用户名和密码，并存储到/etc/nginx/conf.d/.scrapyd_auth<br> 中；<br> <code>sudo htpasswd -bc username password</code>; # 创建文件并生成第一个用户名和密码<br> <code>sudo htpasswd -b user2 password2</code>; # 生产第二个用户名和密码</li>
+</ol>
+<ol>
+<li>配置SELinux<br> 在上述步骤设置完成后，可能还是不能进行反向代理，需要配置SElinux，<blockquote>
+<p>查看audit.log:<code>sudo cat /var/log/audit/audit.log | grep nginx | grep denied</code><br>如果日志中有有相应的nginx网络拒绝信息，需执行以下命令 <code>sudo setsebool httpd_can_network_connect on -P</code>，开启httpd 网络连接（上述时因为nginx使用httpd 标签）</p>
+</blockquote>
+</li>
+</ol>
+<p>上述步骤后访问外网<a href="http://ip:9000应能看到相应的scrapyd服务网页,可使用curl命令进行相关的操作。如curl" target="_blank" rel="external">http://ip:9000应能看到相应的scrapyd服务网页,可使用curl命令进行相关的操作。如curl</a> <a href="http://username:password@ip:port/daemonstatus.json" target="_blank" rel="external">http://username:password@ip:port/daemonstatus.json</a></p>
+<p>另外可配置nginx服务，提供在特定文件目录下载服务,基本配置如下:</p>
+<blockquote>
+<p>location ~ /data {<br>                  root /home/user;<br>                  auth_basic “Restricted”;<br>                  auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  autoindex on;<br>                  sendfile on;<br>                  tcp_nodelay on;<br>                  keepalive_timeout 65;<br>                  }</p>
+</blockquote>
+<p>将上述模块添加到nginx.conf 中的server模块中，或新建一个server模块<br>注意：因为nginx 默认已nginx 运行，不具有/home/user/data文件夹的x和r权限，需进行相关设置；增加x和r权限后仍出现permission erro可能时SELinux权限设置</p>
+<ol>
+<li>检查SELinux是否运行：<code>sudo getenforce</code></li>
+<li>暂时关闭SELinux: <code>sudo setenforce Permissive</code></li>
+<li>restart 或者 reload nginx，如果能解决permission error，则找到问题所在</li>
+<li><code>setenforce Enforcing</code>重新开启权限，<code>chcon -Rt httpd_sys_content_t /path/to/www</code> 增加nginx对目录的读取权限.</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pycharm</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/21/nginx-server/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/10/21/scrapyd-server/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          scrapyd server
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2017/09/28/pycharm/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">pycharm 2017.2.3 中的console soft wraps问题</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
 
 
           </div>
@@ -226,9 +349,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

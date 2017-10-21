@@ -152,6 +152,207 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-scrapyd-server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/21/scrapyd-server/">scrapyd server</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/21/scrapyd-server/" class="archive-article-date">
+  	<time datetime="2017-10-21T06:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在尝试使用scrapyd框架管理scrapy爬虫程序，简单记录下使用过程。</p>
+<p>运行环境：gooogle cloud VM n1-standard-1,centos 7</p>
+<ul>
+<li>在centos7系统中安装miniconda3 python36 64位虚拟环境，使用官网提供的<a href="https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" title="miniconda脚本" target="_blank" rel="external">脚本</a>。我安装在了用户根目录/home/user/,安装后目录为/home/user/miniconda3.</li>
+<li>使用<code>conda create -n py35 python=3.5</code>命令创建虚拟环境python版本为3.5.4，虚拟环境名为py35</li>
+<li>使用<code>conda install -n py35 Twisted -y</code>命令安装Twisted框架；使用pip install Twisted命令编译容易报错。</li>
+<li><p>使用<code>source activate py35</code>命令激活虚拟环境；运行<code>pip install scrapyd</code>命令安装scrapyd框架；创建scrapyd工作目录，如data(/home/user/data)切换至data目录，在data目录中创建scrapyd.conf配置文件，内容见下；运行<code>scrapyd -l scrapyd.log &amp;</code>开启程序后台运行，并将日志记录到scrayd.log中。</p>
+<blockquote>
+<p>[scrapyd]<br>eggs_dir= eggs # eggs 文件目录<br>logs_dir= logs # logs 文件目录<br>items_dir   = # items 文件目录<br>jobs_to_keep = 5<br>dbs_dir = dbs<br>max_proc= 0 # 最大进程数<br>max_proc_per_cpu = 4 # 每个cpu可开启的进程数<br>finished_to_keep = 100<br>poll_interval = 5.0<br>bind_address =  # 默认监听本地ip为127.0.0.1；当为空时，不限定连接ip<br>http_port   = 6800 # 默认监听端口<br>debug   = off # 使用开启debug模式<br>runner  = scrapyd.runner<br>application = scrapyd.app.application<br>launcher= scrapyd.launcher.Launcher<br>webroot = scrapyd.website.Root</p>
+<p>[services]<br>schedule.json = scrapyd.webservice.Schedule<br>cancel.json   = scrapyd.webservice.Cancel<br>addversion.json   = scrapyd.webservice.AddVersion<br>listprojects.json = scrapyd.webservice.ListProjects<br>listversions.json = scrapyd.webservice.ListVersions<br>listspiders.json  = scrapyd.webservice.ListSpiders<br>delproject.json   = scrapyd.webservice.DeleteProject<br>delversion.json   = scrapyd.webservice.DeleteVersion<br>listjobs.json = scrapyd.webservice.ListJobs<br>daemonstatus.json = scrapyd.webservice.DaemonStatus   </p>
+</blockquote>
+</li>
+<li><p>在google cloud 控制台VPC网络中 防火墙规则中添加规则，运行6800端口访问权限，至此就可以运行scrapyd服务了。具体操作见文档<a href="http://scrapyd.readthedocs.io/en/latest/" target="_blank" rel="external">http://scrapyd.readthedocs.io/en/latest/</a></p>
+</li>
+</ul>
+<p>上述中仍有几个遗留问题，上述scrapyd在后台运行，关机重启或者以为终止后需要手动开启；scrapyd框架不提供权限认证，这样会导致任何人都可以通过访问，具有很大的安全隐患，可以考虑将bind_address设置为127.0.0.1，这样只能本地访问；进一步可以考虑进行端口转发，增加认证权限；</p>
+<ol>
+<li>增加scrapyd服务<blockquote>
+<p>[Unit]<br>Description=scrapyd<br>After=network.target</p>
+<p>[Service]<br>User=user<br>Group=user<br>WorkingDirectory=/home/user/data<br>Environment=”PATH=/home/user/miniconda3/envs/py35/bin:$PATH”<br>ExecStart=/bin/bash -c ‘source /home/user/miniconda3/bin/activate py35; /home/user/miniconda3/envs/py35/bin/scrapyd -l scrapyd.log’</p>
+<p>[Install]<br>WantedBy=multi-user.target</p>
+</blockquote>
+</li>
+</ol>
+<p>将上述文件写入到 /etc/systemd/system/scrapyd.service文件中；运行sudo systemctl enable scrapyd;sudo systemctl start scrapyd即可将scrapyd添加到开机启动程序中。</p>
+<p>nginx端口转发将另外一篇文章。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python;scrapy;spider</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/21/scrapyd-server/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-nginx-server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/21/nginx-server/">nginx server</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/21/nginx-server/" class="archive-article-date">
+  	<time datetime="2017-10-21T06:47:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结</p>
+<ol>
+<li>安装nginx<br> <code>sudo yum install nginx</code></li>
+<li>配置nginx<br> nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，内容如下：</li>
+</ol>
+<blockquote>
+<p>server {<br>       listen 9000;<br>       location / {<br>                   auth_basic “Restricted”;<br>                   auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  proxy_pass <a href="http://127.0.0.1：6800" target="_blank" rel="external">http://127.0.0.1：6800</a>; # scrayd listent ip and port<br>                   proxy_set_header X-Real-IP  $remote_addr;<br>                   proxy_set_header X-Forwarded-For $remote_addr;<br>                   proxy_set_header Host $host;<br>                   }<br>       }</p>
+</blockquote>
+<ol>
+<li>配置认证文件<br> 使用htpasswd命令生产认证用户名和密码，并存储到/etc/nginx/conf.d/.scrapyd_auth<br> 中；<br> <code>sudo htpasswd -bc username password</code>; # 创建文件并生成第一个用户名和密码<br> <code>sudo htpasswd -b user2 password2</code>; # 生产第二个用户名和密码</li>
+</ol>
+<ol>
+<li>配置SELinux<br> 在上述步骤设置完成后，可能还是不能进行反向代理，需要配置SElinux，<blockquote>
+<p>查看audit.log:<code>sudo cat /var/log/audit/audit.log | grep nginx | grep denied</code><br>如果日志中有有相应的nginx网络拒绝信息，需执行以下命令 <code>sudo setsebool httpd_can_network_connect on -P</code>，开启httpd 网络连接（上述时因为nginx使用httpd 标签）</p>
+</blockquote>
+</li>
+</ol>
+<p>上述步骤后访问外网<a href="http://ip:9000应能看到相应的scrapyd服务网页,可使用curl命令进行相关的操作。如curl" target="_blank" rel="external">http://ip:9000应能看到相应的scrapyd服务网页,可使用curl命令进行相关的操作。如curl</a> <a href="http://username:password@ip:port/daemonstatus.json" target="_blank" rel="external">http://username:password@ip:port/daemonstatus.json</a></p>
+<p>另外可配置nginx服务，提供在特定文件目录下载服务,基本配置如下:</p>
+<blockquote>
+<p>location ~ /data {<br>                  root /home/user;<br>                  auth_basic “Restricted”;<br>                  auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  autoindex on;<br>                  sendfile on;<br>                  tcp_nodelay on;<br>                  keepalive_timeout 65;<br>                  }</p>
+</blockquote>
+<p>将上述模块添加到nginx.conf 中的server模块中，或新建一个server模块<br>注意：因为nginx 默认已nginx 运行，不具有/home/user/data文件夹的x和r权限，需进行相关设置；增加x和r权限后仍出现permission erro可能时SELinux权限设置</p>
+<ol>
+<li>检查SELinux是否运行：<code>sudo getenforce</code></li>
+<li>暂时关闭SELinux: <code>sudo setenforce Permissive</code></li>
+<li>restart 或者 reload nginx，如果能解决permission error，则找到问题所在</li>
+<li><code>setenforce Enforcing</code>重新开启权限，<code>chcon -Rt httpd_sys_content_t /path/to/www</code> 增加nginx对目录的读取权限.</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/21/nginx-server/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-pycharm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -228,19 +429,19 @@
 
 
   
-    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
+    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/pip/">pip</a>
+      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
     </h1>
   
 
         
-        <a href="/2017/08/20/pip/" class="archive-article-date">
+        <a href="/2017/08/20/asyncio/" class="archive-article-date">
   	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
 </a>
         
@@ -248,66 +449,47 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09<br>    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建）</p>
-<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
-[global]
-timeout = 30
-index-url = https://pypi.doubanio.com/simple
-
-也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
-
-
-anaconda或者miniconda 同样可以通过添加国内下载通道加速。
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --set show_channel_urls yes
-
-
-pip 配置文件
-可以通过配置文件设置pip，配置文件有多个层次。
-</code></pre><ul>
-<li><p>单用户</p>
-<p>  unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>  macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>  windows配置文件位置为 %APPDATA%\pip\pip.ini<br>  在老式系统中，配置也可能在其他位置<br>  unix 和macOS系统 $HOME/.pip/pip.conf<br>  windows系统%HOME\pip\pip.ini</p>
-</li>
-<li><p>在虚拟环境中</p>
-<p>  在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
-</li>
-<li><p>系统配置</p>
-<p>  On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br>  On macOS the file is: /Library/Application Support/pip/pip.conf<br>  On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br>  On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br>  Site-wide configuration is not supported on Windows Vista</p>
-</li>
+        <p><strong>asyncio 学习笔记</strong></p>
+<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
+<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
+<ul>
+<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
+<li>the object obtained by calling a coroutine function.</li>
 </ul>
-<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
-<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
-<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
-<pre><code>pip install SomePackage
-pip install Some-1.0-py2-py3-none-any.whl
-pip show --file SomePackage
-pip list --outdated
-pip install --upgrade SomePackage
-pip uninstall SomePackage
-</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
-<pre><code>pip install SomePackage # latest version
-pip install SomePackage==1.1.1 #specific ver
-pip install SomePackage&gt;=1.11 # minimum ver
-</code></pre><p>2.install a list of requirements specified in a file</p>
-<pre><code>pip install -r requirements.txt
-</code></pre><p>3.upgrade an already installed Somepackage</p>
-<pre><code>pip install --upgrade SomePackage
-</code></pre><p>4.intall a local project in “editable” mode</p>
-<pre><code>pip install -e path/to/project
-</code></pre><p>5.install a source archive file</p>
-<pre><code>pip isntall ./download-tar.gz
-pip install http://my.rep/Somapack.zip
-</code></pre><p>6.install from alterantivate package repositories</p>
-<pre><code>pip install --index-url http://example.com/simple SomePackage
-pip install --no-index --find-links=file:///local/dir SomePackage
-pip install --no-index --find-links=relative/dir SomePackage
-</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
-<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
-</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
-<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
-</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
-<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
+<p>Things a coroutine can do:</p>
+<ul>
+<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
+<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
+<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
+<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
+</ul>
+<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
+<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
+<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
+<li>.stop()</li>
+<li>.close()</li>
+<li>.run_in_executor(f)</li>
+</ul>
+<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
+<ul>
+<li>AbstractEventLoop.call_soon（callback, *args).</li>
+<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
+<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
+<li>.call_at(when, callback, *args)</li>
+</ul>
+<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
+<ul>
+<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
+<li>.exception()<br>  Return the exception that was set on this future.</li>
+<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
+</ul>
+<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
+<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
+<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
+</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
+<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
 
       
 
@@ -331,7 +513,7 @@ pip install --no-index --find-links=relative/dir SomePackage
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
         </p>
       
 
@@ -529,19 +711,19 @@ Parameters:
 
 
   
-    <article id="post-asyncio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="python-pip" class="article article-type-python  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/20/asyncio/">asyncio</a>
+      <a class="article-title" href="/2017/08/20/pip/">pip</a>
     </h1>
   
 
         
-        <a href="/2017/08/20/asyncio/" class="archive-article-date">
+        <a href="/2017/08/20/pip/" class="archive-article-date">
   	<time datetime="2017-08-20T03:30:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-20</time>
 </a>
         
@@ -549,47 +731,66 @@ Parameters:
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>asyncio 学习笔记</strong></p>
-<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>coroutines used with asyncio may be implemented using the <strong>asyn def</strong> statement or by using <strong>generators</strong> . The <strong>async def</strong> type of coroutine was added in Python 3.5.<br>Generator-based corontines should be decorated with <strong>@asyncio.coroutine</strong> , although this is not strictly enfored.</p>
-<p>The word “corontine”, like the word “generator”, is used for two different concepts:</p>
-<ul>
-<li>the function that defines a coroutine, using <strong>async def</strong> or decorated with <strong>@asyncio.coroutine</strong>.</li>
-<li>the object obtained by calling a coroutine function.</li>
+        <h1 id="pip-摘要"><a href="#pip-摘要" class="headerlink" title="pip 摘要"></a>pip 摘要</h1><p>新增：2017-10-09<br>    另外在我的系统中（centos 7 X64)，使用miniconda创建的虚拟环境根目录中放置pip.conf 不能改变默认的index-url，在~/.pip/pip.conf 中可以（上述目录和文件需自行创建）</p>
+<pre><code>修改pip源为doubanio,可以通过修改配置文件 pip.conf或者pip.ini
+[global]
+timeout = 30
+index-url = https://pypi.doubanio.com/simple
+
+也可在单次命令中加入 -i|--index-url https://pypi.doubanio.com/simple
+
+
+anaconda或者miniconda 同样可以通过添加国内下载通道加速。
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+
+
+pip 配置文件
+可以通过配置文件设置pip，配置文件有多个层次。
+</code></pre><ul>
+<li><p>单用户</p>
+<p>  unix系统默认的配置文件位置为 $HOME/.config/pip/pip.conf<br>  macOS系统配置文件为$HOME/Library/Application Support/pip/pip.conf<br>  windows配置文件位置为 %APPDATA%\pip\pip.ini<br>  在老式系统中，配置也可能在其他位置<br>  unix 和macOS系统 $HOME/.pip/pip.conf<br>  windows系统%HOME\pip\pip.ini</p>
+</li>
+<li><p>在虚拟环境中</p>
+<p>  在虚拟环境中，配置文件pip.conf 或Pip.ini在虚拟环境根目录</p>
+</li>
+<li><p>系统配置</p>
+<p>  On Unix the file may be located in /etc/pip.conf. Alternatively it may be in a “pip” subdirectory of any of the paths set in the environment variable XDG_CONFIG_DIRS (if it exists), for example /etc/xdg/pip/pip.conf.<br>  On macOS the file is: /Library/Application Support/pip/pip.conf<br>  On Windows XP the file is: C:\Documents and Settings\All Users\Application Data\pip\pip.ini<br>  On Windows 7 and later the file is hidden, but writeable at C:\ProgramData\pip\pip.ini<br>  Site-wide configuration is not supported on Windows Vista</p>
+</li>
 </ul>
-<p>Things a coroutine can do:</p>
-<ul>
-<li><code>result = await future</code> or <code>result = yield from futur</code>, suspends the coroutine  until the future is done, then return the future’s result, or raises an exception, which will be porpagated. (if the future is cancdelled, it will raise a <code>CancelledError</code> exception. the yielf from can automatically deal with StopIteration.</li>
-<li><code>result = await coroutine</code> or <code>result = yield from coroutine</code>, wait for another coroutine or produce a result(or raise an exception, which will be propagated). The coroutine expression must be a call to another coroutine.</li>
-<li><code>return expression</code> produce a result to the coroutine that is waiting for this one using await or yield from</li>
-<li><code>raise exception</code> raise an exception in the coroutine that is waiting for this one using await or yield from.</li>
-</ul>
-<h2 id="run-an-event-loop"><a href="#run-an-event-loop" class="headerlink" title="run an event loop"></a>run an event loop</h2><ul>
-<li>AbstractEventLoop.run_forever()<br>  run until stop() si called. if stop() is called before run_forever() is called, this polls the I/O selector once with a timeout of zero. run all callbacks scheduled in response to I/O events (and those that were already scheduled) and then exists. If stop（） is called while run_forever() is running, this will run the current batch of callbacks and then exits.</li>
-<li>.run_until_complete(future)<br>  run untile the Future is done. If the argument is a coroutine object, it is wrapped by ensure_future(). Return the Future’s result, or raise its exception.</li>
-<li>.stop()</li>
-<li>.close()</li>
-<li>.run_in_executor(f)</li>
-</ul>
-<h2 id="calls"><a href="#calls" class="headerlink" title="calls"></a>calls</h2><p>most asyncio functions don’t accept keywords. use functools.partical() to pass keywords.</p>
-<ul>
-<li>AbstractEventLoop.call_soon（callback, *args).</li>
-<li>.call_soon_threadsafe(callback, *args)<br>  like call_soon(), but thread safe.</li>
-<li>.call_later(delay, callback, *args)<br>  callback after the given delay seconds</li>
-<li>.call_at(when, callback, *args)</li>
-</ul>
-<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>class asyncio.Future(*, loop=None)<br>This class is almost compatible with  concurrent.</p>
-<ul>
-<li>.result()<br>  Return the result this future represents.If the future has been cancelled, raises CancelledError. If the future’s result isn’t yet available, raises InvalidStateError. If the future is done and has an exception set, this exception is raised.</li>
-<li>.exception()<br>  Return the exception that was set on this future.</li>
-<li>.add_done_callback(fn)<br>  Add a callback to be run when the future becomes done.</li>
-</ul>
-<p>futures.Future.<br>AbstractEventLoop.create_future() creat Future object attached to the loop</p>
-<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><p>AbstractEventLoop.create_task(coro),Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.<br><strong>Don’t directly create Task instances: use the ensure_future() function or the AbstractEventLoop.create_task() method.</strong></p>
-<p>asyncio.as_completed(fs, <em>, loop=None, timeout=None)<br>    Return an iterator whose values, when waited for, are Future instances.<br>asyncio.ensure_future(coro_or_future, </em>, loop=None)</p>
-<pre><code>Schedule the execution of a coroutine object: wrap it in a future. Return a Task object.If the argument is a Future, it is returned directly.
-</code></pre><p>coroutine asyncio.wait(futures, *, loop=None, timeout=None, return_when=ALL_COMPLETED)<br>    Wait for the Futures and coroutine objects given by the sequence futures to complete. Coroutines will be wrapped in Tasks. Returns two sets of Future: (done, pending).</p>
-<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p>Call a function in an Executor (pool of threads or pool of processes). By default, an event loop uses a thread pool executor (ThreadPoolExecutor). coroutine AbstractEventLoop.run_in_executor(executor, func, *args) Arrange for a func to be called in the specified executor.</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://docs.python.org/3/library/asyncio-eventloop.html" title="asyncio-eventloop" target="_blank" rel="external">https://docs.python.org/3/library/asyncio-eventloop.html</a></p>
+<p>当有多个配置文件存在时，优先级为虚拟环境配置&gt;单用户配置&gt;系统配置</p>
+<p>pip is already installed if you are using python 2 &gt;=2.7.9 or python 3 &gt;= 3.4 binaries downloaded from python.org.<br>or you can install pip through <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a>.</p>
+<p>get-pip.py will also install setuptools and wheel, if they are not available in the operating system.<strong>setuptools</strong> is required to install <em>source distributions</em>. Both is required to be able to build a <em>Wheel Cache</em>, although neither are required to install <strong>pre-built wheels</strong>.</p>
+<pre><code>pip install SomePackage
+pip install Some-1.0-py2-py3-none-any.whl
+pip show --file SomePackage
+pip list --outdated
+pip install --upgrade SomePackage
+pip uninstall SomePackage
+</code></pre><h2 id="pip-install"><a href="#pip-install" class="headerlink" title="pip install"></a>pip install</h2><p>1.install SomePackage and its dependencies from PyPI </p>
+<pre><code>pip install SomePackage # latest version
+pip install SomePackage==1.1.1 #specific ver
+pip install SomePackage&gt;=1.11 # minimum ver
+</code></pre><p>2.install a list of requirements specified in a file</p>
+<pre><code>pip install -r requirements.txt
+</code></pre><p>3.upgrade an already installed Somepackage</p>
+<pre><code>pip install --upgrade SomePackage
+</code></pre><p>4.intall a local project in “editable” mode</p>
+<pre><code>pip install -e path/to/project
+</code></pre><p>5.install a source archive file</p>
+<pre><code>pip isntall ./download-tar.gz
+pip install http://my.rep/Somapack.zip
+</code></pre><p>6.install from alterantivate package repositories</p>
+<pre><code>pip install --index-url http://example.com/simple SomePackage
+pip install --no-index --find-links=file:///local/dir SomePackage
+pip install --no-index --find-links=relative/dir SomePackage
+</code></pre><h2 id="pip-uninstall"><a href="#pip-uninstall" class="headerlink" title="pip uninstall"></a>pip uninstall</h2><p>using pip to uninstall package</p>
+<pre><code>pip uninstall [options] &lt;package&gt; # -r requirements.txt -y --yes do not ask for confirmation
+</code></pre><h2 id="pip-freeze"><a href="#pip-freeze" class="headerlink" title="pip freeze"></a>pip freeze</h2><p>output installed packages in requirements format</p>
+<pre><code>pip freeze [options] # -r --requirement &lt;file&gt;
+</code></pre><h2 id="pip-wheel"><a href="#pip-wheel" class="headerlink" title="pip wheel"></a>pip wheel</h2><p>build wheel archives for your requirements and dependencies</p>
+<pre><code>pip wheel --wheel-dir=/tmp/wheelhouse SomePackage
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://pip.pypa.io/en/stable/" title="pip 文档" target="_blank" rel="external">https://pip.pypa.io/en/stable/</a><br><br></p>
 
       
 
@@ -613,7 +814,7 @@ Parameters:
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/20/asyncio/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/20/pip/">展开全文 >></a>
         </p>
       
 
@@ -855,7 +1056,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pycharm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">python;scrapy;spider</a>
               </li>
             
             <div class="clearfix"></div>

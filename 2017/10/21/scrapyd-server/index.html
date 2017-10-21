@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: pycharm | 后花园</title>
+  <title>scrapyd server | 后花园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="随便写写东东西西">
-<meta property="og:type" content="website">
-<meta property="og:title" content="后花园">
-<meta property="og:url" content="http://yoursite.com/tags/pycharm/index.html">
+  <meta name="description" content="最近在尝试使用scrapyd框架管理scrapy爬虫程序，简单记录下使用过程。 运行环境：gooogle cloud VM n1-standard-1,centos 7  在centos7系统中安装miniconda3 python36 64位虚拟环境，使用官网提供的脚本。我安装在了用户根目录/home/user/,安装后目录为/home/user/miniconda3. 使用conda crea">
+<meta name="keywords" content="python;scrapy;spider">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapyd server">
+<meta property="og:url" content="http://yoursite.com/2017/10/21/scrapyd-server/index.html">
 <meta property="og:site_name" content="后花园">
-<meta property="og:description" content="随便写写东东西西">
+<meta property="og:description" content="最近在尝试使用scrapyd框架管理scrapy爬虫程序，简单记录下使用过程。 运行环境：gooogle cloud VM n1-standard-1,centos 7  在centos7系统中安装miniconda3 python36 64位虚拟环境，使用官网提供的脚本。我安装在了用户根目录/home/user/,安装后目录为/home/user/miniconda3. 使用conda crea">
+<meta property="og:updated_time" content="2017-10-21T09:36:08.727Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="后花园">
-<meta name="twitter:description" content="随便写写东东西西">
+<meta name="twitter:title" content="scrapyd server">
+<meta name="twitter:description" content="最近在尝试使用scrapyd框架管理scrapy爬虫程序，简单记录下使用过程。 运行环境：gooogle cloud VM n1-standard-1,centos 7  在centos7系统中安装miniconda3 python36 64位虚拟环境，使用官网提供的脚本。我安装在了用户根目录/home/user/,安装后目录为/home/user/miniconda3. 使用conda crea">
   
     <link rel="alternative" href="/atom.xml" title="后花园" type="application/atom+xml">
   
@@ -150,60 +152,169 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-scrapyd-server" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/28/pycharm/" class="archive-article-date">
-  	<time datetime="2017-09-28T13:17:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-28</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/28/pycharm/">pycharm 2017.2.3 中的console soft wraps问题</a>
+    <h1 class="article-title" itemprop="name">
+      scrapyd server
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/10/21/scrapyd-server/" class="archive-article-date">
+  	<time datetime="2017-10-21T06:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在尝试使用scrapyd框架管理scrapy爬虫程序，简单记录下使用过程。</p>
+<p>运行环境：gooogle cloud VM n1-standard-1,centos 7</p>
+<ul>
+<li>在centos7系统中安装miniconda3 python36 64位虚拟环境，使用官网提供的<a href="https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" title="miniconda脚本" target="_blank" rel="external">脚本</a>。我安装在了用户根目录/home/user/,安装后目录为/home/user/miniconda3.</li>
+<li>使用<code>conda create -n py35 python=3.5</code>命令创建虚拟环境python版本为3.5.4，虚拟环境名为py35</li>
+<li>使用<code>conda install -n py35 Twisted -y</code>命令安装Twisted框架；使用pip install Twisted命令编译容易报错。</li>
+<li><p>使用<code>source activate py35</code>命令激活虚拟环境；运行<code>pip install scrapyd</code>命令安装scrapyd框架；创建scrapyd工作目录，如data(/home/user/data)切换至data目录，在data目录中创建scrapyd.conf配置文件，内容见下；运行<code>scrapyd -l scrapyd.log &amp;</code>开启程序后台运行，并将日志记录到scrayd.log中。</p>
+<blockquote>
+<p>[scrapyd]<br>eggs_dir= eggs # eggs 文件目录<br>logs_dir= logs # logs 文件目录<br>items_dir   = # items 文件目录<br>jobs_to_keep = 5<br>dbs_dir = dbs<br>max_proc= 0 # 最大进程数<br>max_proc_per_cpu = 4 # 每个cpu可开启的进程数<br>finished_to_keep = 100<br>poll_interval = 5.0<br>bind_address =  # 默认监听本地ip为127.0.0.1；当为空时，不限定连接ip<br>http_port   = 6800 # 默认监听端口<br>debug   = off # 使用开启debug模式<br>runner  = scrapyd.runner<br>application = scrapyd.app.application<br>launcher= scrapyd.launcher.Launcher<br>webroot = scrapyd.website.Root</p>
+<p>[services]<br>schedule.json = scrapyd.webservice.Schedule<br>cancel.json   = scrapyd.webservice.Cancel<br>addversion.json   = scrapyd.webservice.AddVersion<br>listprojects.json = scrapyd.webservice.ListProjects<br>listversions.json = scrapyd.webservice.ListVersions<br>listspiders.json  = scrapyd.webservice.ListSpiders<br>delproject.json   = scrapyd.webservice.DeleteProject<br>delversion.json   = scrapyd.webservice.DeleteVersion<br>listjobs.json = scrapyd.webservice.ListJobs<br>daemonstatus.json = scrapyd.webservice.DaemonStatus   </p>
+</blockquote>
+</li>
+<li><p>在google cloud 控制台VPC网络中 防火墙规则中添加规则，运行6800端口访问权限，至此就可以运行scrapyd服务了。具体操作见文档<a href="http://scrapyd.readthedocs.io/en/latest/" target="_blank" rel="external">http://scrapyd.readthedocs.io/en/latest/</a></p>
+</li>
+</ul>
+<p>上述中仍有几个遗留问题，上述scrapyd在后台运行，关机重启或者以为终止后需要手动开启；scrapyd框架不提供权限认证，这样会导致任何人都可以通过访问，具有很大的安全隐患，可以考虑将bind_address设置为127.0.0.1，这样只能本地访问；进一步可以考虑进行端口转发，增加认证权限；</p>
+<ol>
+<li>增加scrapyd服务<blockquote>
+<p>[Unit]<br>Description=scrapyd<br>After=network.target</p>
+<p>[Service]<br>User=user<br>Group=user<br>WorkingDirectory=/home/user/data<br>Environment=”PATH=/home/user/miniconda3/envs/py35/bin:$PATH”<br>ExecStart=/bin/bash -c ‘source /home/user/miniconda3/bin/activate py35; /home/user/miniconda3/envs/py35/bin/scrapyd -l scrapyd.log’</p>
+<p>[Install]<br>WantedBy=multi-user.target</p>
+</blockquote>
+</li>
+</ol>
+<p>将上述文件写入到 /etc/systemd/system/scrapyd.service文件中；运行sudo systemctl enable scrapyd;sudo systemctl start scrapyd即可将scrapyd添加到开机启动程序中。</p>
+<p>nginx端口转发将另外一篇文章。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pycharm</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python;scrapy;spider</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/21/scrapyd-server/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/10/21/nginx-server/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">nginx server</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
 
 
           </div>
@@ -226,9 +337,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/10/21/nginx-server/index.html">
 <meta property="og:site_name" content="后花园">
 <meta property="og:description" content="在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结  安装nginx sudo yum install nginx 配置nginx nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，">
-<meta property="og:updated_time" content="2017-10-21T09:40:56.919Z">
+<meta property="og:updated_time" content="2017-10-21T18:29:02.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx server">
 <meta name="twitter:description" content="在最近的爬虫项目中，使用scrapyd部署管理过程中需要增加认证，以及文件下载功能；了解学习了nginx服务，做个简单总结  安装nginx sudo yum install nginx 配置nginx nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，">
@@ -178,7 +178,7 @@
 <li>配置nginx<br> nginx的默认配置文件在/etc/nginx/nginx.conf以及/etc/nginx/conf.d/文件夹中的*.conf中；考察在conf.d文件夹中创建scrapydrev.conf，内容如下：</li>
 </ol>
 <blockquote>
-<p>server {<br>       listen 9000;<br>       location / {<br>                   auth_basic “Restricted”;<br>                   auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  proxy_pass <a href="http://127.0.0.1：6800" target="_blank" rel="external">http://127.0.0.1：6800</a>; # scrayd listent ip and port<br>                   proxy_set_header X-Real-IP  $remote_addr;<br>                   proxy_set_header X-Forwarded-For $remote_addr;<br>                   proxy_set_header Host $host;<br>                   }<br>       }</p>
+<p>server {<br>       listen 9000;<br>       location / {<br>                   auth_basic “Restricted”;<br>                   auth_basic_user_file /etc/nginx/conf.d/.scrapyd_auth;<br>                  proxy_pass <a href="http://127.0.0.1:6800" target="_blank" rel="external">http://127.0.0.1:6800</a>; # scrayd listent ip and port<br>                   proxy_set_header X-Real-IP  $remote_addr;<br>                   proxy_set_header X-Forwarded-For $remote_addr;<br>                   proxy_set_header Host $host;<br>                   }<br>       }</p>
 </blockquote>
 <ol>
 <li>配置认证文件<br> 使用htpasswd命令生产认证用户名和密码，并存储到/etc/nginx/conf.d/.scrapyd_auth<br> 中；<br> <code>sudo htpasswd -bc username password</code>; # 创建文件并生成第一个用户名和密码<br> <code>sudo htpasswd -b user2 password2</code>; # 生产第二个用户名和密码</li>
@@ -415,11 +415,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
